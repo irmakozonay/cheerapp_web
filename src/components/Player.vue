@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { eventBus } from "../../main.js";
+import { eventBus } from "../main.js";
 
 export default {
   created() {
@@ -39,7 +39,9 @@ export default {
   },
   methods: {
     addTrack(track) {
+      this.stopSimilarTracks(track);
       track["id"] = Date.now();
+      console.log("add" + track.id);
       var sounds = track.sounds.slice();
       if (track.type == "up") {
         sounds.push({ fileName: "applause_mid_1.m4a" });
@@ -49,6 +51,16 @@ export default {
       this.trackOrder.splice(0, 0, track.id);
       this.playTrack(track);
     },
+    stopSimilarTracks(track) {
+      if (track.type == "Mars" || track.type == "Tezahurat") {
+        for (const activeTrackId in this.tracks) {
+          const activeTrack = this.tracks[activeTrackId];
+          if (activeTrack.type == "Mars" || activeTrack.type == "Tezahurat") {
+            this.stopTrack(activeTrack);
+          }
+        }
+      }
+    },
     onChangeSoundVolume(track) {
       track.sounds.forEach((item) => {
         item.audio.volume = this.trackVolumes[track.id] / 100;
@@ -56,9 +68,10 @@ export default {
     },
     stopTrack(track) {
       track.sounds.forEach((item) => {
-        console.log(item.fileName);
+        console.log(item.audio);
         item.audio.pause();
       });
+      console.log("remove" + track.id);
       this.removeTrack(track);
     },
     playTrack(track) {

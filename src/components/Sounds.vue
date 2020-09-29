@@ -45,8 +45,9 @@ export default {
           { name: "Crowd Football 2", fileName: "crowd_football2.m4a" },
         ],
       },
+      shotcutKeys: { M: "Mars", T: "Tezahurat", Y: "Tepki", G: "Gurultu" },
       shortkeyListener: null,
-      previousKey: -1,
+      previousKey: "",
     };
   },
   methods: {
@@ -62,12 +63,14 @@ export default {
     },
     addShortkeyListener() {
       this.shortkeyListener = window.addEventListener("keydown", (e) => {
-        if (this.previousKey == 77 && e.keyCode > 47 && e.keyCode < 58) {
-          //m 0 - 9
-          console.log("mars " + (e.keyCode - 48));
+        const number = e.keyCode - 48;
+        const type = this.shotcutKeys[this.previousKey];
+        if (type != null && number > -1 && number < 10) {
+          var soundMap = this.sounds[type][number - 1];
+          this.addSounds(soundMap.name, soundMap, type);
+          console.log(type + " " + number);
         }
-        this.previousKey = e.keyCode;
-        console.log(e.keyCode);
+        this.previousKey = String.fromCharCode(e.keyCode);
       });
     },
     removeShortkeyListener() {

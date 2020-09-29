@@ -1,27 +1,27 @@
 <template>
   <div id="app">
-    <Feed/>
-    <Shortcuts/>
-    <Player/>
-    <Sounds/>
+    <Feed />
+    <Shortcuts />
+    <Player />
+    <Sounds />
   </div>
 </template>
 
 <script>
-import Feed from './components/feed/Feed.vue'
-import Player from './components/player/Player.vue'
-import Shortcuts from './components/Shortcuts.vue'
-import Sounds from './components/Sounds.vue'
+import Feed from "./components/feed/Feed.vue";
+import Player from "./components/Player.vue";
+import Shortcuts from "./components/Shortcuts.vue";
+import Sounds from "./components/Sounds.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     Feed,
     Player,
     Shortcuts,
-    Sounds
-  }
-}
+    Sounds,
+  },
+};
 </script>
 
 <style>
