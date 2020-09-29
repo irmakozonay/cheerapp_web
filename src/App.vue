@@ -3,23 +3,23 @@
     <Feed/>
     <Shortcuts/>
     <Player/>
-    <Home/>
+    <Sounds/>
   </div>
 </template>
 
 <script>
-import Home from './components/Home.vue'
 import Feed from './components/feed/Feed.vue'
 import Player from './components/player/Player.vue'
 import Shortcuts from './components/Shortcuts.vue'
+import Sounds from './components/Sounds.vue'
 
 export default {
   name: 'App',
   components: {
-    Home,
     Feed,
     Player,
-    Shortcuts
+    Shortcuts,
+    Sounds
   }
 }
 </script>
