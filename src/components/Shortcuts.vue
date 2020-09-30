@@ -19,7 +19,7 @@ import { eventBus } from "../main.js";
 
 export default {
   computed: {
-    ...mapGetters("feed", ["feed", "feedSoundSubtypeMap"]),
+    ...mapGetters("feed", ["feed", "feedSubtypeMap"]),
   },
   data() {
     return {
@@ -29,10 +29,11 @@ export default {
   },
   methods: {
     playSoundType(type) {
-      const sounds = this.feedSoundSubtypeMap[type][0];
+      const gameFeed = this.feedSubtypeMap[type][0];
       eventBus.$emit("addTrack-Player", {
+        id: gameFeed.id,
         name: type + " shortcut",
-        sounds: sounds,
+        sounds: gameFeed.sounds,
         type: type,
       });
     },

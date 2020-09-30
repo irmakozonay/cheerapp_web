@@ -5,8 +5,14 @@
       <ul v-for="(soundMap, soundIndex) in soundsArray" :key="soundIndex">
         <li>
           <span>{{ soundIndex + 1 }}. {{ soundMap.name }}: </span>
-          <button @click="addSounds(soundMap.name, soundMap, type)">
-            Baslat
+          <button
+            @click="
+              trackOrder.includes(soundMap.id)
+                ? stopSounds(soundMap.id)
+                : addSounds(soundMap, type)
+            "
+          >
+            {{ trackOrder.includes(soundMap.id) ? "Durdur" : "Baslat" }}
           </button>
           <br />
         </li>
@@ -17,32 +23,41 @@
 
 <script>
 import { eventBus } from "../main.js";
+import { mapGetters } from "vuex";
 
 export default {
+  computed: {
+    ...mapGetters("player", ["trackOrder"]),
+  },
   data() {
     return {
       sounds: {
         Mars: [
-          { name: "12 Dev Adam", fileName: "12DevAdam.m4a" },
-          { name: "12 Dev Adam 2", fileName: "12DevAdam_2.m4a" },
+          { id: 1, name: "12 Dev Adam", fileName: "12DevAdam.m4a" },
+          { id: 2, name: "12 Dev Adam 2", fileName: "12DevAdam_2.m4a" },
         ],
         Tezahurat: [
-          { name: "Sari - Kirmizi", fileName: "sarikirmizi.m4a" },
-          { name: "Sari - Kirmizi Stereo", fileName: "sarikirmizi_stereo.m4a" },
-          { name: "Kirmizi - Beyaz", fileName: "kirmizibeyaz.m4a" },
+          { id: 3, name: "Sari - Kirmizi", fileName: "sarikirmizi.m4a" },
           {
+            id: 4,
+            name: "Sari - Kirmizi Stereo",
+            fileName: "sarikirmizi_stereo.m4a",
+          },
+          { id: 5, name: "Kirmizi - Beyaz", fileName: "kirmizibeyaz.m4a" },
+          {
+            id: 6,
             name: "Kirmizi - Beyaz Stereo",
             fileName: "kirmizibeyaz_stereo.m4a",
           },
         ],
         Tepki: [
-          { name: "Alkis", fileName: "alkis.m4a" },
-          { name: "Islik", fileName: "islik.m4a" },
-          { name: "Yuh", fileName: "yuh.m4a" },
+          { id: 7, name: "Alkis", fileName: "alkis.m4a" },
+          { id: 8, name: "Islik", fileName: "islik.m4a" },
+          { id: 9, name: "Yuh", fileName: "yuh.m4a" },
         ],
         Gurultu: [
-          { name: "Crowd Football", fileName: "crowd_football.m4a" },
-          { name: "Crowd Football 2", fileName: "crowd_football2.m4a" },
+          { id: 10, name: "Crowd Football", fileName: "crowd_football.m4a" },
+          { id: 11, name: "Crowd Football 2", fileName: "crowd_football2.m4a" },
         ],
       },
       shotcutKeys: { M: "Mars", T: "Tezahurat", Y: "Tepki", G: "Gurultu" },
@@ -54,12 +69,16 @@ export default {
     theAction(event) {
       console.log(event.srcKey);
     },
-    addSounds(name, sound, type) {
+    addSounds(sound, type) {
       eventBus.$emit("addTrack-Player", {
-        name: name,
+        id: sound.id,
+        name: sound.name,
         sounds: [sound],
         type: type,
       });
+    },
+    stopSounds(trackId) {
+      eventBus.$emit("stopTrack-Player", trackId);
     },
     addShortkeyListener() {
       this.shortkeyListener = window.addEventListener("keydown", (e) => {

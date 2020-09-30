@@ -8,16 +8,16 @@
       >
         <li>
           <span>{{ gameFeed.text }}: </span>
-          <!-- <button type="button" @click="playSound(soundMap.fileName)">{{soundsAudios[soundMap.fileName] == null ? 'Baslat' : 'Durdur'}}</button> -->
           <br />
           <button
             @click="
-              addSounds(gameFeed.text, gameFeed.sounds, gameFeed.soundsType)
+              trackOrder.includes(gameFeed.id)
+                ? stopSounds(gameFeed.id)
+                : addSounds(gameFeed)
             "
           >
-            Play
+            {{ trackOrder.includes(gameFeed.id) ? "Durdur" : "Baslat" }}
           </button>
-          <!-- <input v-if="soundsAudios[soundMap.fileName] != null" type="range" min="0" max="100" v-model="soundsVolumeLevels[soundMap.fileName]" @change="onChangeSoundVolume(soundMap.fileName)" @input="onChangeSoundVolume(soundMap.fileName)"> -->
         </li>
       </ul>
     </div>
@@ -33,6 +33,7 @@ import { eventBus } from "../../main.js";
 export default {
   computed: {
     ...mapGetters("feed", ["feed"]),
+    ...mapGetters("player", ["trackOrder"]),
   },
   data() {
     return {};
@@ -42,12 +43,16 @@ export default {
   },
   methods: {
     ...mapActions("feed", ["addFeed"]),
-    addSounds(name, sounds, type) {
+    addSounds(gameFeed) {
       eventBus.$emit("addTrack-Player", {
-        name: name,
-        sounds: sounds,
-        type: type,
+        id: gameFeed.id,
+        name: gameFeed.text,
+        sounds: gameFeed.sounds,
+        type: gameFeed.soundsType,
       });
+    },
+    stopSounds(trackId) {
+      eventBus.$emit("stopTrack-Player", trackId);
     },
     getFeed() {
       axios
